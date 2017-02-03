@@ -15,8 +15,8 @@ This example intentionally avoids advanced topics like async and load balancing,
 # Running the example
 This example has two services: frontend and backend. They both report trace data to zipkin. To setup the demo, you need to start Frontend, Backend and Zipkin.
 
-Once the services are started, open http://localhost:8080/
-* This will call the backend (http://localhost:9000/api) and show the result, which defaults to a formatted date.
+Once the services are started, open http://localhost:9000/
+* This will call the backend (http://localhost:9001/api) and show the result, which defaults to a formatted date.
 
 Next, you can view traces that went through the backend via http://localhost:9411/?serviceName=backend
 * This is a locally run zipkin service which keeps traces in memory
@@ -28,6 +28,16 @@ $ sbt "run-main -Dzipkin.initialSampleRate=1.0 finatra.FrontendMain"
 $ sbt "run-main finatra.BackendMain"
 ```
 
+Finatra has support for the following tracing-related flags:
+
+Name | Default Value | Description
+---- | ------------- | -----------
+`zipkin.initialSampleRate` | 0.001 | percentage of traces to sample and report to zipkin [0.0 - 1.0]
+`zipkin.http.compressionEnabled` | true | gzip spans before sending
+`zipkin.http.host` | localhost:9411 | location of the zipkin http collector
+`zipkin.http.hostHeader` | zipkin | host header to use when sending spans to zipkin
+`com.twitter.finagle.tracing.debugTrace` | false | print all traces to the console (useful for debugging)
+
 Next, run [Zipkin](http://zipkin.io/), which stores and queries traces reported by the above services.
 
 ```bash
@@ -37,7 +47,7 @@ java -jar zipkin.jar
 
 ## Troubleshooting
 
-Finagle includes a flag that dumps traces into the error log (or stderr in our example setup). This can be helpful
+You can use the `debugTrace` flag described above to dump traces into the error log (or stderr in our example setup). This can be helpful
 if you want to see which annotations are being sent to zipkin.
 
 ex.
