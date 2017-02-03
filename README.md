@@ -34,3 +34,13 @@ Next, run [Zipkin](http://zipkin.io/), which stores and queries traces reported 
 wget -O zipkin.jar 'https://search.maven.org/remote_content?g=io.zipkin.java&a=zipkin-server&v=LATEST&c=exec'
 java -jar zipkin.jar
 ```
+
+## Troubleshooting
+
+Finagle includes a flag that dumps traces into the error log (or stderr in our example setup). This can be helpful
+if you want to see which annotations are being sent to zipkin.
+
+ex.
+```bash
+$ sbt "run-main -Dzipkin.initialSampleRate=1.0 -Dcom.twitter.finagle.tracing.debugTrace=true finatra.FrontendMain"
+```
